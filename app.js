@@ -1,16 +1,15 @@
 // Following https://www.youtube.com/watch?v=W7FaYfuwu70
 
 const listsContainer = document.querySelector('[data-lists]')
-const newListForm = document.querySelector('[date-new-list-form]')
+const newListForm = document.querySelector('[data-new-list-form]')
 const newListInput = document.querySelector('[data-new-list-input]')
 const deleteListButton = document.querySelector('[data-delete-list-button]')
 
-const LOCAL_STORAGE_LIST_KEY = 'task-lists'
+const LOCAL_STORAGE_LIST_KEY = 'task.lists'
 const LOCAL_STORAGE_SELECTED_LIST_ID_KEY = 'task.selectedListId'
 let lists = JSON.parse(localStorage.getItem(LOCAL_STORAGE_LIST_KEY)) || []
 let selectedListId = localStorage.getItem(LOCAL_STORAGE_SELECTED_LIST_ID_KEY)
 
-// Stopped here (17:05)
 listsContainer.addEventListener('click', e => {
   if (e.target.tagName.toLowerCase() === 'li') {
     selectedListId = e.target.dataset.listId
@@ -31,11 +30,26 @@ newListForm.addEventListener('submit', e => {
   const list = createList(listName)
   newListInput.value = null
   lists.push(list)
-  render()
+  saveAndRender()
+})
+
+newTaskForm.addEventListener('submit', e => {
+  e.preventDefault()
+  const taskName = newTaskInput.value
+  if (taskName == null || taskName === '') return
+  const task = createTask(taskName)
+  newTaskInput.value = null
+  const selectedList = lists.find(list => list.id === selectedListId)
+  selectedList.tasks.push(task)
+  saveAndRender()
 })
 
 function createList(name) {
-  return {id: Date.now().toString(), name: name, tasks: [] }
+  return { id: Date.now().toString(), name: name, tasks: [] }
+}
+
+function createTask(name) {
+  return { id: Date.now().toString(), name: name, complete: false }
 }
 
 function saveAndRender() {
