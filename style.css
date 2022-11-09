@@ -1,0 +1,18 @@
+/*
+* {
+
+}
+*/
+
+html {
+  font-family: Times, 'Times New Roman', serif;
+  font-size: larger;
+}
+
+.title {
+  font-family: Times, 'Times New Roman', serif;
+  font-size: largest;
+  background-color: rgba(25, 25, 245, 0.3);
+  color: rgb(255, 255, 255);
+  padding: 4px 12px;
+}
