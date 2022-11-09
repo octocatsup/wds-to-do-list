@@ -4,6 +4,10 @@ const listsContainer = document.querySelector('[data-lists]')
 const newListForm = document.querySelector('[data-new-list-form]')
 const newListInput = document.querySelector('[data-new-list-input]')
 const deleteListButton = document.querySelector('[data-delete-list-button]')
+const listDisplayContainer = document.querySelector('[data-list-display-container]')
+const listTitleElement = document.querySelector('[data-list-title]')
+const listCountElement = document.querySelector('[data-list-count]')
+const tasksContainer = document.querySelector('[data-tasks]')
 
 const LOCAL_STORAGE_LIST_KEY = 'task.lists'
 const LOCAL_STORAGE_SELECTED_LIST_ID_KEY = 'task.selectedListId'
@@ -33,17 +37,6 @@ newListForm.addEventListener('submit', e => {
   saveAndRender()
 })
 
-newTaskForm.addEventListener('submit', e => {
-  e.preventDefault()
-  const taskName = newTaskInput.value
-  if (taskName == null || taskName === '') return
-  const task = createTask(taskName)
-  newTaskInput.value = null
-  const selectedList = lists.find(list => list.id === selectedListId)
-  selectedList.tasks.push(task)
-  saveAndRender()
-})
-
 function createList(name) {
   return { id: Date.now().toString(), name: name, tasks: [] }
 }
@@ -64,17 +57,21 @@ function save() {
 
 function render() {
   clearElement(listsContainer)
-  lists.forEach(list => {
-  const listElement = document.createElement('li')
-  listElement.dataset.listId = list.id
-  listElement.classList.add("list-name")
-  listElement.innerText = list.name
-  if (listId === selectedListId) {
-    listElement.classList.add('active-list')
-  }
-  listsContainer.appendChild(listElement)
-  })
+  renderLists()
 } 
+
+function renderLists() {
+  lists.forEach(list => {
+    const listElement = document.createElement('li')
+    listElement.dataset.listId = list.id
+    listElement.classList.add("list-name")
+    listElement.innerText = list.name
+    if (list.id === selectedListId) {
+      listElement.classList.add('active-list')
+    }
+    listsContainer.appendChild(listElement)
+    })
+}
 
 function clearElement(element) {
   while (element.firstChild) {
